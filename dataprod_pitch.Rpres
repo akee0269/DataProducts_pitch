@@ -1,0 +1,49 @@
+Data Products App Pitch
+========================================================
+author: Akshat Narain
+date: `r date()`
+
+About The Application
+========================================================
+
+The application help you predict the efficiency of your automobile by using four basic predictors:
+
+- Transmission type of the automobile (automatic vs. manual)
+- Weight of the automobile (in pounds) (1000 - 5000)
+- Number of carburetors in the automobile (1 - 8)
+- Engine type (V vs S)
+
+Efficiency is measured in miles per gallon of the automobile.
+
+Prediction Dataset
+========================================================
+
+The prediction algorithm is based on the **mtcars** dataset in R datasets. The data is extracted from the 1974 Motor Trend US Magazine and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973 to 1974 models). The extract below shows dataset with four predictors.
+
+```{r, echo=FALSE}
+data(mtcars)
+data <- data.frame(head(mtcars))
+data <- data[,c("am", "wt", "carb", "vs")]
+print(data)
+```
+
+Exploratory Correlation Matrix
+========================================================
+```{r, echo=FALSE}
+library(corrplot)
+data(mtcars)
+m <- cor(mtcars)
+corrplot(m, method="circle")
+```
+
+p-values suggest second model gives best prediction
+========================================================
+
+```{r, echo=FALSE}
+fit1 <- lm(mpg~am, data=mtcars)
+fit2 <- update(fit1, mpg~am+wt+carb+vs, data=mtcars)
+fit3 <- update(fit2, mpg~am+wt+carb+vs+qsec+hp+cyl+disp+drat+gear, data=mtcars)
+anova(fit1, fit2, fit3)
+```
+
+
